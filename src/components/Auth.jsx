@@ -15,10 +15,14 @@ export default function Auth({ onSubmit }) {
   return (
     <div className="auth">
       <h2>Auth</h2>
-      <p>Your apiKey here</p>
       <form onSubmit={handleSubmit}>
-        <input value={slackID} onChange={(e) => setSlackID(e.target.value)} />
         <input
+          placeholder="Slack ID"
+          value={slackID}
+          onChange={(e) => setSlackID(e.target.value)}
+        />
+        <input
+          placeholder="Api Key"
           type="password"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
@@ -26,7 +30,9 @@ export default function Auth({ onSubmit }) {
         <button type="submit">Submit</button>
       </form>
 
-      <p>(Don't share it and blablabla)</p>
+      <p style={{ fontStyle: "italic" }}>
+        Ptss..., don't have an Api Key? Read: How do I get an API Key?
+      </p>
     </div>
   );
 }

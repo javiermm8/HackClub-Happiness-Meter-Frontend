@@ -44,6 +44,49 @@
     border-radius: 30px;
 }
 
+.auth form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth input {
+    background: #262626;
+    color: #eeba2c;
+    border-radius: 30px;
+    border-color: #eeba2c;
+    border-style: solid;
+    padding: 2%;
+    padding-left: 4%;
+}
+
+.auth input:focus {
+    outline: none;
+}
+
+.auth button {
+    background: #eeba2c;
+    color: #262626;
+    border-radius: 30px;
+    border-color: #eeba2c;
+    border-style: solid;
+    padding: 2%;
+    box-shadow: 0 9px rgb(238 186 44 / 54%);
+}
+
+.auth button:hover {
+    background-color: #262626;
+    color: #eeba2c;
+}
+
+.auth button:active {
+    outline: none;
+    background-color: #262626;
+    color: #eeba2c;
+    box-shadow: 0 5px rgb(238 186 44 / 54%);
+    transform: translateY(4px);
+}
+
 .profile {
     background: #262626;
     color: #eeba2c;
