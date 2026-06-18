@@ -22,7 +22,7 @@ export default function Auth({ onSubmit }) {
           onChange={(e) => setSlackID(e.target.value)}
         />
         <input
-          placeholder="Api Key"
+          placeholder="API Key"
           type="password"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}

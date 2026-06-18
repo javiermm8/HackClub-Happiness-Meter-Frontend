@@ -1,4 +1,5 @@
 export default function Profile({
+  authLoaded,
   userName,
   userSlackID,
   userLatestHappinessLevel,
@@ -7,6 +8,8 @@ export default function Profile({
   userAverageHappiness,
   userNumberOfEntries,
 }) {
+  //let showProfile;
+
   let name;
   let SlackID;
   let LatestHappinessLevel;
@@ -15,35 +18,31 @@ export default function Profile({
   let AverageHappiness;
   let NumberOfEntries;
 
-  if (userName == "") {
-    name = "";
-    SlackID = "";
-    LatestHappinessLevel = "";
-    LatestNote = "";
-    LatestEntryTimestamp = "";
-    AverageHappiness = "";
-    NumberOfEntries = "";
-  } else {
-    name = "Slack username:" + userName;
-    SlackID = "Slack ID:" + userSlackID;
-    LatestHappinessLevel = "LatestHappinessLevel:" + userLatestHappinessLevel;
-    LatestNote = "Latest note:" + userLatestNote;
-    LatestEntryTimestamp = "Latest entry timestamp:" + userLatestEntryTimestamp;
-    AverageHappiness = "Average happiness:" + userAverageHappiness;
-    NumberOfEntries = "Number of entries:" + userNumberOfEntries;
-  }
+  name = userName;
+  SlackID = "(" + userSlackID + ")";
+  LatestHappinessLevel = "Latest happiness level: " + userLatestHappinessLevel;
+  LatestNote = "Latest note: " + userLatestNote;
+  LatestEntryTimestamp = "Latest entry timestamp: " + userLatestEntryTimestamp;
+  AverageHappiness = "Average happiness: " + userAverageHappiness;
+  NumberOfEntries = "Number of entries: " + userNumberOfEntries;
 
   return (
     <div className="profile">
       <h2>Your Profile</h2>
-      <img />
-      <h4>{name}</h4>
-      <p>{SlackID}</p>
-      <h5>{LatestHappinessLevel}</h5>
-      <p>
-        {LatestNote}, {LatestEntryTimestamp}, {AverageHappiness},
-        {NumberOfEntries},
-      </p>
+      {!authLoaded && (
+        <p>Please log in and create an entry to view your profile.</p>
+      )}
+      {authLoaded && (
+        <>
+          <h4>{name}</h4>
+          <p>{SlackID}</p>
+          <h5>{LatestHappinessLevel}</h5>
+          <p>{LatestNote}</p>
+          <p>{LatestEntryTimestamp}</p>
+          <p>{AverageHappiness}</p>
+          <p>{NumberOfEntries}</p>
+        </>
+      )}
     </div>
   );
 }
