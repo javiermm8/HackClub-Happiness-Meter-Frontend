@@ -18,7 +18,7 @@ export default function Entry({ authLoaded, onSubmit }) {
       <h2>New Entry</h2>
       {!authLoaded && (
         <>
-          <p>Log in first</p>
+          <p>Please log in to log your happiness level.</p>
         </>
       )}
       {authLoaded && (

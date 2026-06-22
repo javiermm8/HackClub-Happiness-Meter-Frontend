@@ -49,6 +49,9 @@ function App() {
         if (response.status != 404 && !response.ok) {
           throw new Error("Network response was not ok");
         }
+        setApiKey(apiKey);
+        setSlackID(slackID);
+        setAuthLoaded(true);
         return data;
       })
       .then(function (data) {

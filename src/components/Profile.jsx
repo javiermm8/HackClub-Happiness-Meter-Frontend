@@ -29,10 +29,14 @@ export default function Profile({
   return (
     <div className="profile">
       <h2>Your Profile</h2>
-      {!authLoaded && (
-        <p>Please log in and create an entry to view your profile.</p>
+      {!authLoaded && <p>Please log in to view your profile.</p>}
+      {authLoaded && userName == "" && (
+        <p>
+          There is no data to display. You must first create an entry in order
+          to view your profile.
+        </p>
       )}
-      {authLoaded && (
+      {authLoaded && userName != "" && (
         <>
           <h4>{name}</h4>
           <p>{SlackID}</p>
