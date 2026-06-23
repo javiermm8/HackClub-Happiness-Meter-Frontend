@@ -12,7 +12,7 @@ import Entry from "./components/Entry";
 import Footer from "./components/Footer";
 
 function App() {
-  const [authLoaded, setAuthLoaded] = useState(false);
+  const [authed, setAuthed] = useState("un-authed");
   const [userName, setUserName] = useState("");
   const [userSlackID, setUserSlackID] = useState("");
   const [userLatestHappinessLevel, setUserLatestHappinessLevel] = useState("");
@@ -38,71 +38,84 @@ function App() {
   //   .then((data) => console.log(data))
   //   .catch((error) => console.error("Fetch error:", error));
 
-  function handleAuth({ slackID, apiKey }) {
-    fetch("https://happinessmeter.javim.dev/profile?slackID=" + slackID, {
-      headers: {
-        Authorization: apiKey,
-      },
-    })
-      .then((response) => {
-        const data = response.json();
-        if (response.status != 404 && !response.ok) {
-          throw new Error("Network response was not ok");
-        }
+  async function loadProfile({ slackID, apiKey }) {
+    try {
+      const response = await fetch(
+        "https://happinessmeter.javim.dev/profile?slackID=" +
+          encodeURIComponent(slackID),
+        {
+          headers: {
+            Authorization: apiKey,
+          },
+        },
+      );
+      const data = await response.json();
+
+      if (response.status === 401) {
+        setAuthed("bad-authed");
+        return;
+      }
+      if (response.status === 404) {
         setApiKey(apiKey);
         setSlackID(slackID);
-        setAuthLoaded(true);
-        return data;
-      })
-      .then(function (data) {
-        if (data.message == "No profile found. Have you created any entries?") {
-          console.log(data.message);
-          return;
-        } else {
-          setApiKey(apiKey);
-          setSlackID(slackID);
-          setUserSlackID(data.SlackID);
-          setUserName(data.Name);
-          setUserLatestHappinessLevel(data.LatestHappinessLevel);
-          setUserLatestEntryTimestamp(data.LatestEntryTimestamp);
-          setUserAverageHappiness(data.AverageHappiness);
-          setNumberOfEntries(data.NumberOfEntries);
-          setLatestNote(data.LatestNote);
-          setAuthLoaded(true);
-        }
-      })
-      .catch((error) => console.error("Fetch error:", error));
+        setAuthed("authed");
+        setUserSlackID(data?.SlackID ?? "");
+        setUserName(data?.Name ?? null);
+        setUserLatestHappinessLevel(data?.LatestHappinessLevel ?? "");
+        setUserLatestEntryTimestamp(data?.LatestEntryTimestamp ?? "");
+        setUserAverageHappiness(data?.AverageHappiness ?? "");
+        setNumberOfEntries(data?.NumberOfEntries ?? "");
+        setLatestNote(data?.LatestNote ?? "");
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.status);
+      }
+
+      setApiKey(apiKey);
+      setSlackID(slackID);
+      setAuthed("authed");
+      setUserSlackID(data.SlackID);
+      setUserName(data.Name);
+      setUserLatestHappinessLevel(data.LatestHappinessLevel);
+      setUserLatestEntryTimestamp(data.LatestEntryTimestamp);
+      setUserAverageHappiness(data.AverageHappiness);
+      setNumberOfEntries(data.NumberOfEntries);
+      setLatestNote(data.LatestNote);
+    } catch (error) {
+      console.error("GET profile error:", error);
+    }
   }
 
-  const handleNewEntry = ({ happinessLevel, note }) => {
-    const data = {
+  const handleNewEntry = async ({ happinessLevel, note }) => {
+    const body = {
       APIKey: apiKey,
       HappinessLevel: Number(happinessLevel),
       SlackID: slackID,
       Note: note,
     };
 
-    fetch("https://happinessmeter.javim.dev/newEntry", {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        const data = response.json();
-        if (response.status != 404 && !response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return data;
-      })
-      .then(function (data) {
-        if (data.message == "No profile found. Have you created any entries?") {
-          console.log(data.message);
-          return;
-        } else {
-          setEntrySuccess(true);
-          handleAuth({ slackID, apiKey });
-        }
-      })
-      .catch((error) => console.error("Fetch error:", error));
+    try {
+      const response = await fetch(
+        "https://happinessmeter.javim.dev/newEntry",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.status);
+      }
+
+      setEntrySuccess(true);
+      await loadProfile({ slackID, apiKey });
+    } catch (error) {
+      console.error("POST new entry error:", error);
+      setEntrySuccess(false);
+    }
   };
 
   return (
@@ -110,9 +123,9 @@ function App() {
       <Header />
       <div className="main">
         <Intro />
-        <Auth onSubmit={handleAuth} />
+        <Auth authed={authed} onSubmit={loadProfile} />
         <Profile
-          authLoaded={authLoaded}
+          authed={authed}
           userName={userName}
           userSlackID={userSlackID}
           userLatestHappinessLevel={userLatestHappinessLevel}
@@ -123,7 +136,11 @@ function App() {
         />
         <SignIn />
         <Friend />
-        <Entry authLoaded={authLoaded} onSubmit={handleNewEntry} />
+        <Entry
+          authed={authed}
+          entrySuccess={entrySuccess}
+          onSubmit={handleNewEntry}
+        />
       </div>
       <Footer />
     </>

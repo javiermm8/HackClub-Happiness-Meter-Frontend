@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Auth({ onSubmit }) {
+export default function Auth({ authed, onSubmit }) {
   const [slackID, setSlackID] = useState("");
   const [apiKey, setApiKey] = useState("");
 
@@ -27,6 +27,9 @@ export default function Auth({ onSubmit }) {
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
         />
+        {authed == "bad-authed" && (
+          <small className="bad-auth">Incorrect SlackID or API Key.</small>
+        )}
         <button type="submit">Submit</button>
       </form>
 

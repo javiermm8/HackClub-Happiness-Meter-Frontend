@@ -1,5 +1,5 @@
 export default function Profile({
-  authLoaded,
+  authed,
   userName,
   userSlackID,
   userLatestHappinessLevel,
@@ -29,14 +29,14 @@ export default function Profile({
   return (
     <div className="profile">
       <h2>Your Profile</h2>
-      {!authLoaded && <p>Please log in to view your profile.</p>}
-      {authLoaded && userName == "" && (
+      {authed != "authed" && <p>Please log in to view your profile.</p>}
+      {authed == "authed" && userName == null && (
         <p>
           There is no data to display. You must first create an entry in order
           to view your profile.
         </p>
       )}
-      {authLoaded && userName != "" && (
+      {authed == "authed" && userName != null && (
         <>
           <h4>{name}</h4>
           <p>{SlackID}</p>

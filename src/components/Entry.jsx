@@ -1,13 +1,12 @@
 import { useState } from "react";
 
-export default function Entry({ authLoaded, onSubmit }) {
+export default function Entry({ authed, entrySuccess, onSubmit }) {
   const [happinessLevel, setHappinessLevel] = useState(0);
   const [note, setNote] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
-      authLoaded,
       happinessLevel,
       note,
     });
@@ -16,12 +15,12 @@ export default function Entry({ authLoaded, onSubmit }) {
   return (
     <div className="entry">
       <h2>New Entry</h2>
-      {!authLoaded && (
+      {authed != "authed" && (
         <>
-          <p>Please log in to log your happiness level.</p>
+          <p>Please log in to update your happiness level.</p>
         </>
       )}
-      {authLoaded && (
+      {authed == "authed" && (
         <form onSubmit={handleSubmit}>
           <input
             type="number"
@@ -38,7 +37,11 @@ export default function Entry({ authLoaded, onSubmit }) {
             onChange={(e) => setNote(e.target.value)}
           />
 
-          <button type="submit">Submit</button>
+          {entrySuccess && (
+            <p>Happiness level updated! Your profile has been updated.</p>
+          )}
+
+          <button type="submit">Update Happiness!</button>
         </form>
       )}
     </div>
