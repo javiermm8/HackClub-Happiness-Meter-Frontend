@@ -10,6 +10,7 @@ import SignIn from "./components/SignIn";
 import Friend from "./components/Friend";
 import Entry from "./components/Entry";
 import Footer from "./components/Footer";
+import Stats from "./components/Stats";
 
 function App() {
   const [authed, setAuthed] = useState("un-authed");
@@ -31,6 +32,8 @@ function App() {
   const [friendExists, setFriendExists] = useState(false);
   const [friendMessage, setFriendMessage] = useState("");
 
+  const [statsMessage, setStatsMessage] = useState("");
+
   useEffect(() => {
     async function checkStatus() {
       try {
@@ -49,6 +52,31 @@ function App() {
     }
     checkStatus();
     const interval = setInterval(checkStatus, 30_000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    async function getStats() {
+      try {
+        const response = await fetch("https://happinessmeter.javim.dev/stats");
+        if (response.status === 429) {
+          return;
+        }
+        if (!response.ok) {
+          throw new Error("Network response was not ok: " + response.status);
+        } else {
+          const data = await response.json();
+          setStatsMessage(data.message);
+        }
+      } catch (error) {
+        console.error("GET stats error:", error);
+      }
+    }
+    getStats();
+    const interval = setInterval(getStats, 30_000);
 
     return () => {
       clearInterval(interval);
@@ -190,6 +218,8 @@ function App() {
           entrySuccess={entrySuccess}
           onSubmit={handleNewEntry}
         />
+
+        <Stats statsMessage={statsMessage} />
       </div>
       <Footer />
     </>
