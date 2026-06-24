@@ -196,6 +196,7 @@ function App() {
       <Header statusOK={statusOK} />
       <div className="main">
         <Intro />
+        <SignIn />
         <Auth authed={authed} onSubmit={loadProfile} />
         <Profile
           authed={authed}
@@ -207,7 +208,6 @@ function App() {
           userAverageHappiness={userAverageHappiness}
           userNumberOfEntries={userNumberOfEntries}
         />
-        <SignIn />
         <Friend
           entrySuccess={entrySuccess}
           friendExists={friendExists}
