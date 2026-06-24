@@ -26,17 +26,18 @@ function App() {
 
   const [entrySuccess, setEntrySuccess] = useState(false);
 
-  // fetch("https://pep-unethical-copy.ngrok-free.dev/status", {
-  //   headers: { "ngrok-skip-browser-warning": "true" },
-  // })
-  //   .then((response) => {
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     return response.json();
-  //   })
-  //   .then((data) => console.log(data))
-  //   .catch((error) => console.error("Fetch error:", error));
+  const [statusOK, setStatusOK] = useState(false);
+
+  fetch("https://happinessmeter.javim.dev/status")
+    .then((response) => {
+      if (!response.ok) {
+        setStatusOK(false);
+        throw new Error("Network response was not ok");
+      } else {
+        setStatusOK(true);
+      }
+    })
+    .catch((error) => console.error("GET status error:", error));
 
   async function loadProfile({ slackID, apiKey }) {
     try {
@@ -49,12 +50,14 @@ function App() {
           },
         },
       );
-      const data = await response.json();
 
       if (response.status === 401) {
         setAuthed("bad-authed");
         return;
       }
+
+      const data = await response.json();
+
       if (response.status === 404) {
         setApiKey(apiKey);
         setSlackID(slackID);
@@ -120,7 +123,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header statusOK={statusOK} />
       <div className="main">
         <Intro />
         <Auth authed={authed} onSubmit={loadProfile} />
