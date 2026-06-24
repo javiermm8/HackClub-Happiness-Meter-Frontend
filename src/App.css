@@ -91,6 +91,10 @@
     color: red;
 }
 
+.authed {
+    color: green;
+}
+
 .profile {
     background: #262626;
     color: #eeba2c;

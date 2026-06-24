@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./App.css";
 
@@ -28,16 +28,32 @@ function App() {
 
   const [statusOK, setStatusOK] = useState(false);
 
-  fetch("https://happinessmeter.javim.dev/status")
-    .then((response) => {
-      if (!response.ok) {
-        setStatusOK(false);
-        throw new Error("Network response was not ok");
-      } else {
-        setStatusOK(true);
+  const [friendExists, setFriendExists] = useState(false);
+  const [friendMessage, setFriendMessage] = useState("");
+
+  useEffect(() => {
+    async function checkStatus() {
+      try {
+        const response = await fetch("https://happinessmeter.javim.dev/status");
+        if (response.status === 429) {
+          return;
+        }
+        if (!response.ok) {
+          setStatusOK(false);
+        } else {
+          setStatusOK(true);
+        }
+      } catch (error) {
+        console.error("GET status error:", error);
       }
-    })
-    .catch((error) => console.error("GET status error:", error));
+    }
+    checkStatus();
+    const interval = setInterval(checkStatus, 30_000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   async function loadProfile({ slackID, apiKey }) {
     try {
@@ -114,12 +130,38 @@ function App() {
       }
 
       setEntrySuccess(true);
+      getHappinessFriend(Number(happinessLevel));
       await loadProfile({ slackID, apiKey });
     } catch (error) {
       console.error("POST new entry error:", error);
       setEntrySuccess(false);
     }
   };
+
+  async function getHappinessFriend(happinessLevel) {
+    try {
+      const response = await fetch(
+        "https://happinessmeter.javim.dev/happinessFriend?happinessLevel=" +
+          encodeURIComponent(happinessLevel),
+      );
+
+      if (response.status === 404) {
+        setFriendExists(false);
+        console.log("Caught 404");
+        return;
+      }
+
+      const data = await response.json();
+      setFriendExists(true);
+      setFriendMessage(data?.message ?? "");
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.status);
+      }
+    } catch (error) {
+      console.error("GET happinessFriend error:", error);
+    }
+  }
 
   return (
     <>
@@ -138,7 +180,11 @@ function App() {
           userNumberOfEntries={userNumberOfEntries}
         />
         <SignIn />
-        <Friend />
+        <Friend
+          entrySuccess={entrySuccess}
+          friendExists={friendExists}
+          friendMessage={friendMessage}
+        />
         <Entry
           authed={authed}
           entrySuccess={entrySuccess}

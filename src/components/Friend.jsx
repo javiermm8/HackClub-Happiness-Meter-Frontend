@@ -1,11 +1,14 @@
-export default function Friend() {
+export default function Friend({ entrySuccess, friendExists, friendMessage }) {
   return (
     <div className="friend">
       <h2>Your Happiness Friend is:</h2>
-      <img />
-      <h4>Name</h4>
-      <p>Slack ID</p>
-      <h5>Latest Happiness Level: 8</h5>
+      {!entrySuccess && (
+        <p>Please submit an entry to see your happiness friend.</p>
+      )}
+      {entrySuccess && !friendExists && (
+        <p>No other user has submitted an entry with that happiness level :(</p>
+      )}
+      {entrySuccess && friendExists && <p>{friendMessage}</p>}
     </div>
   );
 }

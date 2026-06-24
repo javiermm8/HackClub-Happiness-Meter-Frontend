@@ -30,6 +30,9 @@ export default function Auth({ authed, onSubmit }) {
         {authed == "bad-authed" && (
           <small className="bad-auth">Incorrect SlackID or API Key.</small>
         )}
+        {authed == "authed" && (
+          <small className="authed">Loged in! Scroll down :)</small>
+        )}
         <button type="submit">Submit</button>
       </form>
 
