@@ -22,13 +22,18 @@ export default function Entry({ authed, entrySuccess, onSubmit }) {
       )}
       {authed == "authed" && (
         <form onSubmit={handleSubmit}>
+          <small>
+            In a scale from 1 to 10 how happy are you right now? Value:{" "}
+            {happinessLevel}
+          </small>
           <input
-            type="number"
+            type="range"
             min="1"
             max="10"
             value={happinessLevel}
             onChange={(e) => setHappinessLevel(e.target.value)}
           />
+          <small>And why?</small>
           <input
             placeholder="Note"
             value={note}
@@ -38,7 +43,9 @@ export default function Entry({ authed, entrySuccess, onSubmit }) {
           />
 
           {entrySuccess && (
-            <p>Happiness level updated! Your profile has been updated.</p>
+            <p style={{ color: "green" }}>
+              Happiness level updated! Your profile has been updated.
+            </p>
           )}
 
           <button type="submit">Update Happiness!</button>

@@ -140,6 +140,53 @@
     border-radius: 30px;
 }
 
+.entry form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    padding-bottom: 5%;
+}
+
+.entry input {
+    background: #262626;
+    color: #eeba2c;
+    border-radius: 30px;
+    border-color: #eeba2c;
+    border-style: solid;
+    padding: 1%;
+    padding-left: 4%;
+    accent-color: #eeba2c;
+}
+
+.entry input:focus {
+    outline: none;
+}
+
+.entry button {
+    background: #eeba2c;
+    color: #262626;
+    border-radius: 30px;
+    border-color: #eeba2c;
+    border-style: solid;
+    padding: 2%;
+    box-shadow: 0 9px rgb(238 186 44 / 54%);
+    font-size: 120%;
+}
+
+.entry button:hover {
+    background-color: #262626;
+    color: #eeba2c;
+}
+
+.entry button:active {
+    outline: none;
+    background-color: #262626;
+    color: #eeba2c;
+    box-shadow: 0 5px rgb(238 186 44 / 54%);
+    transform: translateY(4px);
+}
+
 .stats {
     background: #262626;
     color: #eeba2c;
