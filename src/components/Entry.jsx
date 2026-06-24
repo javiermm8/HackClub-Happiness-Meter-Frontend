@@ -42,9 +42,16 @@ export default function Entry({ authed, entrySuccess, onSubmit }) {
             onChange={(e) => setNote(e.target.value)}
           />
 
-          {entrySuccess && (
+          {entrySuccess === "good-entry" && (
             <p style={{ color: "green" }}>
               Happiness level updated! Your profile has been updated.
+            </p>
+          )}
+
+          {entrySuccess === "bad-entry" && (
+            <p style={{ color: "red" }}>
+              Something went wrong. Unable to update your happiness. Try again
+              later.
             </p>
           )}
 

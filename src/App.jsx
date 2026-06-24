@@ -25,13 +25,14 @@ function App() {
   const [slackID, setSlackID] = useState("");
   const [apiKey, setApiKey] = useState("");
 
-  const [entrySuccess, setEntrySuccess] = useState(false);
+  const [entrySuccess, setEntrySuccess] = useState("no-entry");
 
   const [statusOK, setStatusOK] = useState(false);
 
   const [friendExists, setFriendExists] = useState(false);
   const [friendMessage, setFriendMessage] = useState("");
 
+  const [statsOK, setStatsOK] = useState(false);
   const [statsMessage, setStatsMessage] = useState("");
 
   useEffect(() => {
@@ -39,6 +40,7 @@ function App() {
       try {
         const response = await fetch("https://happinessmeter.javim.dev/status");
         if (response.status === 429) {
+          setStatusOK(false);
           return;
         }
         if (!response.ok) {
@@ -47,6 +49,7 @@ function App() {
           setStatusOK(true);
         }
       } catch (error) {
+        setStatusOK(false);
         console.error("GET status error:", error);
       }
     }
@@ -63,15 +66,19 @@ function App() {
       try {
         const response = await fetch("https://happinessmeter.javim.dev/stats");
         if (response.status === 429) {
+          setStatsOK(false);
           return;
         }
         if (!response.ok) {
+          setStatsOK(false);
           throw new Error("Network response was not ok: " + response.status);
         } else {
+          setStatsOK(true);
           const data = await response.json();
           setStatsMessage(data.message);
         }
       } catch (error) {
+        setStatsOK(false);
         console.error("GET stats error:", error);
       }
     }
@@ -154,15 +161,16 @@ function App() {
       );
 
       if (!response.ok) {
+        setEntrySuccess("bad-entry");
         throw new Error("Network response was not ok: " + response.status);
       }
 
-      setEntrySuccess(true);
+      setEntrySuccess("good-entry");
       getHappinessFriend(Number(happinessLevel));
       await loadProfile({ slackID, apiKey });
     } catch (error) {
+      setEntrySuccess("bad-entry");
       console.error("POST new entry error:", error);
-      setEntrySuccess(false);
     }
   };
 
@@ -175,7 +183,6 @@ function App() {
 
       if (response.status === 404) {
         setFriendExists(false);
-        console.log("Caught 404");
         return;
       }
 
@@ -219,7 +226,7 @@ function App() {
           onSubmit={handleNewEntry}
         />
 
-        <Stats statsMessage={statsMessage} />
+        <Stats statsOK={statsOK} statsMessage={statsMessage} />
       </div>
       <Footer />
     </>

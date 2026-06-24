@@ -1,8 +1,9 @@
-export default function Stats({ statsMessage }) {
+export default function Stats({ statsOK, statsMessage }) {
   return (
     <div className="stats">
       <h2>Stats</h2>
-      <p>{statsMessage}</p>
+      {!statsOK && <p>Unable to get stats.</p>}
+      {statsOK && <p>{statsMessage}</p>}
     </div>
   );
 }
