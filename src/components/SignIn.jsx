@@ -7,7 +7,7 @@ export default function SignIn() {
         Helper(ID: U0B6D2WBM8B) on Slack. The bot will reply with your APIKey,
         keep it safe!
       </p>
-      <img src="/src/assets/app.png" />
+      <img src="/assets/app.png" />
       <p>(Those are dummy credentials, don't even try to use them.)</p>
     </div>
   );

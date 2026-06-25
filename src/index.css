@@ -1,8 +1,17 @@
+:root {
+    --bg: #14141a;
+    --card-bg: #1e1e24;
+    --accent: #f2b134;
+    --accent-soft: rgba(242, 177, 52, 0.35);
+    --text: #f2b134;
+    --text-dim: #c9a25a;
+}
+
 header {
-    background: #262626;
+    background: var(--card-bg);
     justify-content: center;
     align-items: center;
-    color: #eeba2c;
+    color: var(--text);
     height: 30%;
 
     border-radius: 100px;
@@ -32,15 +41,18 @@ header p {
 }
 
 body {
-    background: #eeba2c;
+    background: var(--bg);
     padding: 10px 10px;
+    font-family: "Space Grotesk", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 footer {
-    background: #262626;
+    background: var(--card-bg);
     display: grid;
     justify-content: center;
     align-items: center;
-    color: #eeba2c;
+    color: var(--text);
     border-radius: 100px;
 }

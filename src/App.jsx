@@ -13,7 +13,17 @@ import Footer from "./components/Footer";
 import Stats from "./components/Stats";
 
 function App() {
+  ///STATES
+  // useStates for STATUS
+  const [statusOK, setStatusOK] = useState(false);
+  // useStates for STATS
+  const [statsOK, setStatsOK] = useState(false);
+  const [statsMessage, setStatsMessage] = useState("");
+  // useStates for AUTH
   const [authed, setAuthed] = useState("un-authed");
+  const [slackID, setSlackID] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  // useStates for PROFILE info
   const [userName, setUserName] = useState("");
   const [userSlackID, setUserSlackID] = useState("");
   const [userLatestHappinessLevel, setUserLatestHappinessLevel] = useState("");
@@ -21,28 +31,23 @@ function App() {
   const [userLatestEntryTimestamp, setUserLatestEntryTimestamp] = useState("");
   const [userAverageHappiness, setUserAverageHappiness] = useState("");
   const [userNumberOfEntries, setNumberOfEntries] = useState("");
-
-  const [slackID, setSlackID] = useState("");
-  const [apiKey, setApiKey] = useState("");
-
+  // useStates for ENTRY
   const [entrySuccess, setEntrySuccess] = useState("no-entry");
-
-  const [statusOK, setStatusOK] = useState(false);
-
+  // useStates for FRIEND
   const [friendOK, setFriendOK] = useState(true);
   const [friendExists, setFriendExists] = useState(false);
   const [friendMessage, setFriendMessage] = useState("");
 
-  const [statsOK, setStatsOK] = useState(false);
-  const [statsMessage, setStatsMessage] = useState("");
-
+  ///FETCH FUNCTIONS
+  // GET /status
   useEffect(() => {
     async function checkStatus() {
       try {
         const response = await fetch("https://happinessmeter.javim.dev/status");
+        //If rate limited
         if (response.status === 429) {
           setStatusOK(false);
-          return;
+          throw new Error("Network response was not ok: " + response.status);
         }
         if (!response.ok) {
           setStatusOK(false);
@@ -54,18 +59,20 @@ function App() {
         console.error("GET status error:", error);
       }
     }
+    //Check status when loading the page
     checkStatus();
+    //Check status every 30sec
     const interval = setInterval(checkStatus, 30_000);
-
     return () => {
       clearInterval(interval);
     };
   }, []);
-
+  // GET /stats
   useEffect(() => {
     async function getStats() {
       try {
         const response = await fetch("https://happinessmeter.javim.dev/stats");
+        //If rate limited
         if (response.status === 429) {
           setStatsOK(false);
           return;
@@ -83,14 +90,15 @@ function App() {
         console.error("GET stats error:", error);
       }
     }
+    //Check status when loading the page
     getStats();
+    //Check status every 30sec
     const interval = setInterval(getStats, 30_000);
-
     return () => {
       clearInterval(interval);
     };
   }, []);
-
+  // GET /profile(called when user auths)
   async function loadProfile({ slackID, apiKey }) {
     try {
       const response = await fetch(
@@ -107,20 +115,18 @@ function App() {
         setAuthed("bad-authed");
         return;
       }
-
-      const data = await response.json();
-
       if (response.status === 404) {
         setApiKey(apiKey);
         setSlackID(slackID);
         setAuthed("authed");
-        setUserSlackID(data?.SlackID ?? "");
-        setUserName(data?.Name ?? null);
-        setUserLatestHappinessLevel(data?.LatestHappinessLevel ?? "");
-        setUserLatestEntryTimestamp(data?.LatestEntryTimestamp ?? "");
-        setUserAverageHappiness(data?.AverageHappiness ?? "");
-        setNumberOfEntries(data?.NumberOfEntries ?? "");
-        setLatestNote(data?.LatestNote ?? "");
+
+        setUserSlackID("");
+        setUserName("");
+        setUserLatestHappinessLevel("");
+        setUserLatestEntryTimestamp("");
+        setUserAverageHappiness("");
+        setNumberOfEntries("");
+        setLatestNote("");
         return;
       }
 
@@ -132,6 +138,7 @@ function App() {
       setApiKey(apiKey);
       setSlackID(slackID);
       setAuthed("authed");
+      const data = await response.json();
       setUserSlackID(data.SlackID);
       setUserName(data.Name);
       setUserLatestHappinessLevel(data.LatestHappinessLevel);
@@ -144,7 +151,7 @@ function App() {
       console.error("GET profile error:", error);
     }
   }
-
+  // POST /newEntry
   const handleNewEntry = async ({ happinessLevel, note }) => {
     const body = {
       APIKey: apiKey,
@@ -178,7 +185,7 @@ function App() {
       console.error("POST new entry error:", error);
     }
   };
-
+  // GET /happinessFriend
   async function getHappinessFriend(happinessLevel) {
     try {
       const response = await fetch(

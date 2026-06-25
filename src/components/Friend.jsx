@@ -8,8 +8,6 @@ export default function Friend({
     <div className="friend">
       <h2>Your Happiness Friend is:</h2>
 
-      {console.log(friendOK, entrySuccess, friendExists)}
-
       {!friendOK && <p>Unable to find your happiness friend :(</p>}
 
       {entrySuccess === "no-entry" && (

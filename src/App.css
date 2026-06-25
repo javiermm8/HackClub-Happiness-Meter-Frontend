@@ -1,3 +1,12 @@
+:root {
+    --bg: #14141a;
+    --card-bg: #1e1e24;
+    --accent: #f2b134;
+    --accent-soft: rgba(242, 177, 52, 0.35);
+    --text: #f2b134;
+    --text-dim: #c9a25a;
+}
+
 .main {
     padding: 20px 0px;
     display: grid;
@@ -29,173 +38,88 @@
     grid-area: 4 / 1 / 4 / 4;
 }
 
-.intro {
-    background: #262626;
-    color: #eeba2c;
+.intro,
+.auth,
+.profile,
+.signIn,
+.friend,
+.entry,
+.stats {
+    background: var(--card-bg);
+    color: var(--text);
     justify-content: center;
     align-items: center;
     padding: 10px 20px;
     border-radius: 30px;
 }
-
-.auth {
-    background: #262626;
-    color: #eeba2c;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    border-radius: 30px;
-}
-
-.auth form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.auth input {
-    background: #262626;
-    color: #eeba2c;
-    border-radius: 30px;
-    border-color: #eeba2c;
-    border-style: solid;
-    padding: 2%;
-    padding-left: 4%;
-}
-
-.auth input:focus {
-    outline: none;
-}
-
-.auth button {
-    background: #eeba2c;
-    color: #262626;
-    border-radius: 30px;
-    border-color: #eeba2c;
-    border-style: solid;
-    padding: 2%;
-    box-shadow: 0 9px rgb(238 186 44 / 54%);
-}
-
-.auth button:hover {
-    background-color: #262626;
-    color: #eeba2c;
-}
-
-.auth button:active {
-    outline: none;
-    background-color: #262626;
-    color: #eeba2c;
-    box-shadow: 0 5px rgb(238 186 44 / 54%);
-    transform: translateY(4px);
-}
-
-.bad-auth {
-    color: red;
-}
-
-.authed {
-    color: green;
-}
-
 .profile {
-    background: #262626;
-    color: #eeba2c;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    border-radius: 30px;
     text-align: center;
 }
-
-.signIn {
-    background: #262626;
-    color: #eeba2c;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    border-radius: 30px;
-}
-
-.signIn img {
-    max-width: 80%;
-    height: auto;
-}
-
-.friend {
-    background: #262626;
-    color: #eeba2c;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    border-radius: 30px;
-}
-
-.entry {
-    background: #262626;
-    color: #eeba2c;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    border-radius: 30px;
-}
-
+.auth form,
 .entry form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-
+}
+.entry form {
     padding-bottom: 5%;
 }
-
+.auth input,
 .entry input {
-    background: #262626;
-    color: #eeba2c;
+    background: #14141a;
+    color: var(--text);
     border-radius: 30px;
-    border-color: #eeba2c;
-    border-style: solid;
-    padding: 1%;
-    padding-left: 4%;
-    accent-color: #eeba2c;
-}
-
-.entry input:focus {
-    outline: none;
-}
-
-.entry button {
-    background: #eeba2c;
-    color: #262626;
-    border-radius: 30px;
-    border-color: #eeba2c;
+    border-color: var(--accent);
     border-style: solid;
     padding: 2%;
-    box-shadow: 0 9px rgb(238 186 44 / 54%);
+    padding-left: 4%;
+    accent-color: var(--accent);
+}
+.auth input:focus,
+.entry input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.auth button,
+.entry button {
+    background: var(--accent);
+    color: #14141a;
+    border-radius: 30px;
+    border-color: var(--accent);
+    border-style: solid;
+    padding: 2%;
+    box-shadow: 0 9px var(--accent-soft);
+    transition:
+        background-color 0.15s,
+        color 0.15s,
+        transform 0.1s;
+}
+.entry button {
     font-size: 120%;
 }
-
+.auth button:hover,
 .entry button:hover {
-    background-color: #262626;
-    color: #eeba2c;
+    background-color: #14141a;
+    color: var(--accent);
 }
-
+.auth button:active,
 .entry button:active {
     outline: none;
-    background-color: #262626;
-    color: #eeba2c;
-    box-shadow: 0 5px rgb(238 186 44 / 54%);
+    background-color: #14141a;
+    color: var(--accent);
+    box-shadow: 0 5px var(--accent-soft);
     transform: translateY(4px);
 }
-
-.stats {
-    background: #262626;
-    color: #eeba2c;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 20px;
-    border-radius: 30px;
+.bad-auth {
+    color: #ff6b6b;
 }
-
+.authed {
+    color: #6bd48f;
+}
+.signIn img {
+    max-width: 80%;
+    height: auto;
+}
 @media (max-width: 600px) {
     .main {
         grid-template-columns: 1fr;

@@ -8,8 +8,6 @@ export default function Profile({
   userAverageHappiness,
   userNumberOfEntries,
 }) {
-  //let showProfile;
-
   let name;
   let SlackID;
   let LatestHappinessLevel;
@@ -30,13 +28,13 @@ export default function Profile({
     <div className="profile">
       <h2>Your Profile</h2>
       {authed != "authed" && <p>Please log in to view your profile.</p>}
-      {authed == "authed" && userName == null && (
+      {authed == "authed" && userName == "" && (
         <p>
           There is no data to display. You must first create an entry in order
           to view your profile.
         </p>
       )}
-      {authed == "authed" && userName != null && (
+      {authed == "authed" && userName != "" && (
         <>
           <h4>{name}</h4>
           <p>{SlackID}</p>
