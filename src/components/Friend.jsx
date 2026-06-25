@@ -1,14 +1,26 @@
-export default function Friend({ entrySuccess, friendExists, friendMessage }) {
+export default function Friend({
+  friendOK,
+  entrySuccess,
+  friendExists,
+  friendMessage,
+}) {
   return (
     <div className="friend">
       <h2>Your Happiness Friend is:</h2>
-      {!entrySuccess && (
+
+      {console.log(friendOK, entrySuccess, friendExists)}
+
+      {!friendOK && <p>Unable to find your happiness friend :(</p>}
+
+      {entrySuccess === "no-entry" && (
         <p>Please submit an entry to see your happiness friend.</p>
       )}
-      {entrySuccess && !friendExists && (
+
+      {entrySuccess === "good-entry" && !friendExists && (
         <p>No other user has submitted an entry with that happiness level :(</p>
       )}
-      {entrySuccess && friendExists && <p>{friendMessage}</p>}
+
+      {entrySuccess === "good-entry" && friendExists && <p>{friendMessage}</p>}
     </div>
   );
 }

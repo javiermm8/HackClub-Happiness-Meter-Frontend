@@ -29,6 +29,7 @@ function App() {
 
   const [statusOK, setStatusOK] = useState(false);
 
+  const [friendOK, setFriendOK] = useState(true);
   const [friendExists, setFriendExists] = useState(false);
   const [friendMessage, setFriendMessage] = useState("");
 
@@ -124,6 +125,7 @@ function App() {
       }
 
       if (!response.ok) {
+        setAuthed("something-wrong-authed");
         throw new Error("Network response was not ok: " + response.status);
       }
 
@@ -138,6 +140,7 @@ function App() {
       setNumberOfEntries(data.NumberOfEntries);
       setLatestNote(data.LatestNote);
     } catch (error) {
+      setAuthed("something-wrong-authed");
       console.error("GET profile error:", error);
     }
   }
@@ -162,6 +165,7 @@ function App() {
 
       if (!response.ok) {
         setEntrySuccess("bad-entry");
+        setFriendOK(false);
         throw new Error("Network response was not ok: " + response.status);
       }
 
@@ -170,6 +174,7 @@ function App() {
       await loadProfile({ slackID, apiKey });
     } catch (error) {
       setEntrySuccess("bad-entry");
+      setFriendOK(false);
       console.error("POST new entry error:", error);
     }
   };
@@ -182,18 +187,22 @@ function App() {
       );
 
       if (response.status === 404) {
+        setFriendOK(true);
         setFriendExists(false);
         return;
       }
 
       const data = await response.json();
+      setFriendOK(true);
       setFriendExists(true);
       setFriendMessage(data?.message ?? "");
 
       if (!response.ok) {
+        setFriendOK(false);
         throw new Error("Network response was not ok: " + response.status);
       }
     } catch (error) {
+      setFriendOK(false);
       console.error("GET happinessFriend error:", error);
     }
   }
@@ -216,6 +225,7 @@ function App() {
           userNumberOfEntries={userNumberOfEntries}
         />
         <Friend
+          friendOK={friendOK}
           entrySuccess={entrySuccess}
           friendExists={friendExists}
           friendMessage={friendMessage}

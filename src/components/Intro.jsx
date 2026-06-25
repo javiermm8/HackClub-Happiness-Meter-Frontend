@@ -27,7 +27,7 @@ export default function Intro() {
         "Update Happiness!". Your profile will now display some stats and you'll
         be able to see your happiness friend.
       </p>
-      <h3>What is a "Happiness Friend"</h3>
+      <h3>What is a "Happiness Friend"?</h3>
       <p>
         The Happiness friend feature shows you the latest user who submitted the
         same happiness level as you plus other information about their latest
@@ -37,10 +37,12 @@ export default function Intro() {
       <p>
         All information provided exept your APIKey can be publicly accesed via
         the Happiness Friend feature, so be careful with what you
-        share(especially in the Notes field). Also, any misuse of the "Note"
-        feature will result in a ban(I'll just randomize your API Key in the
-        database). If you see anybody using this feature or any other feature
-        wrong please DM javim on Slack.
+        share(especially in the Notes field).
+      </p>
+      <p>
+        Also, any misuse of the "Note" feature will result in a ban(I'll just
+        randomize your API Key in the database). If you see anybody using this
+        feature or any other feature wrong please DM javim on Slack.
       </p>
     </div>
   );
